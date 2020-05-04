@@ -18,7 +18,7 @@ namespace AppsGenerate.CodeGenerate.Generators
             using (var fs = File.Create($"{structure.Name}Window.js"))
             using (var writer = new StreamWriter(fs))
             {
-                writer.WriteLine($@"Ext.define('ProjectName.view.{structure.Name}List', {{
+                writer.WriteLine($@"Ext.define('{structure.Project.Name}.view.{structure.Name}List', {{
                    extend: 'Ext.grid.Panel',
     alias: 'widget.{structure.Name.ToLower()}-list',
     store: '{structure.Name}Store',

@@ -4,6 +4,8 @@ namespace AppsGenerate.Structures
 {
     public abstract class Structure
     {
+        public ProjectStructure Project { get; set; }
+        
         public Structure ParentStructure { get; set; }
         public StructureType StrucutureType { get; set; }
         public string Name { get; set; }

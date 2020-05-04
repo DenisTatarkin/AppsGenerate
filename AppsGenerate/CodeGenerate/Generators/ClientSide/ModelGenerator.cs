@@ -21,7 +21,7 @@ namespace AppsGenerate.CodeGenerate.Generators
             using (var fs = File.Create($"{structure.Name}Model.js"))
             using (var writer = new StreamWriter(fs))
             {
-                writer.WriteLine($@"Ext.define('ProjectName.model.{structure.Name}', {{
+                writer.WriteLine($@"Ext.define('{structure.Project.Name}.model.{structure.Name}', {{
                    extend: 'Ext.data.Model',
                     idProperty: 'id',
                     fields:

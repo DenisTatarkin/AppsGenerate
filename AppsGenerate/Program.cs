@@ -1,5 +1,6 @@
 ﻿using System;
 using AppsGenerate.CodeGenerate.Generators;
+using AppsGenerate.Structures;
 using AppsGenerate.Structures.Impl;
 
 namespace AppsGenerate
@@ -8,8 +9,12 @@ namespace AppsGenerate
     {
         static void Main(string[] args)
         {
+            var project1 = new ProjectStructure();
+            project1.Name = "Clients";
             var class1 = new EntityStructure();
             var class2 = new EntityStructure();
+            class1.Project = project1;
+            class2.Project = project1;
             class2.Name = "Parent";
             class1.ParentStructure = class2;
             class1.Name = "User";
@@ -37,6 +42,7 @@ namespace AppsGenerate
             });
             
             var enum1 = new EnumStructure();
+            enum1.Project = project1;
             enum1.Name = "NumType";
             enum1.AccessModificator = AccessModType.Public;
             enum1._consts.Add("Inn");

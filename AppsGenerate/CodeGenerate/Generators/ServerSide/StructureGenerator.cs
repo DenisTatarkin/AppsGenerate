@@ -32,7 +32,7 @@ namespace AppsGenerate.CodeGenerate.Generators
             using (var fs = File.Create($"{structure.Name}.cs"))
             using (var writer = new StreamWriter(fs))
             {
-                //todo: namespace
+                writer.WriteLine($"namespace {structure.Project.Name}.Model{{");
                 writer.WriteLine(UsingsService.GetUsings());
                 writer.WriteLine(Enum.GetName(typeof(AccessModType), structure.AccessModificator).ToLower() + " " +
                     Enum.GetName(typeof(StructureType), structure.StrucutureType).ToLower() + " " +
@@ -53,7 +53,7 @@ namespace AppsGenerate.CodeGenerate.Generators
         private void CloseCode(FileInfo file)
         {
             File.AppendAllLines(file.Name, new[] {
-                "}"
+                "}}"
             });
         }
     }

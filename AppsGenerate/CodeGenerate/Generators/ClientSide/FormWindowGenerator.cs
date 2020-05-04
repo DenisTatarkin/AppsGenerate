@@ -18,7 +18,7 @@ namespace AppsGenerate.CodeGenerate.Generators
             using (var fs = File.Create($"{structure.Name}Window.js"))
             using (var writer = new StreamWriter(fs))
             {
-                writer.WriteLine($@"Ext.define('ProjectName.view.{structure.Name}Window', {{
+                writer.WriteLine($@"Ext.define('{structure.Project.Name}.view.{structure.Name}Window', {{
                    extend: 'Ext.window.Window',
     alias: 'widget.{structure.Name.ToLower()}-window',
     title: 'Title',
@@ -26,7 +26,7 @@ namespace AppsGenerate.CodeGenerate.Generators
     autoShow: true,
     initComponent: function () {{
                     this.callParent(arguments);
-                this.down('form').loadRecord(Ext.create('ProjectName.model.{structure.Name}Model'));
+                this.down('form').loadRecord(Ext.create('{structure.Project.Name}.model.{structure.Name}Model'));
                     }},");
                 return new FileInfo($"{structure.Name}Window.js");
             }

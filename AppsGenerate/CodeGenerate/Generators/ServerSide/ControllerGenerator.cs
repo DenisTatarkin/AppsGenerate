@@ -11,11 +11,11 @@ namespace AppsGenerate.CodeGenerate.Generators
             using (var fs = File.Create($"{structure.Name}Controller.cs"))
             using (var writer = new StreamWriter(fs))
             {
-                //todo: namespace
+                writer.WriteLine($"namespace {structure.Project.Name}.Controller{{");
                 writer.WriteLine(UsingsService.GetUsings());
                 writer.WriteLine($"public class {structure.Name}Controller:BaseController<{structure.Name}>{{");
                 writer.WriteLine($"public {structure.Name}Controller(IDataAccessObject<{structure.Name}> db) : base(db){{}}");
-                writer.WriteLine("}");
+                writer.WriteLine("}}");
             }
 
             return new FileInfo($"{structure.Name}Controller.cs");
