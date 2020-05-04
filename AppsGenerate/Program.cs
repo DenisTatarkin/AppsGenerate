@@ -1,0 +1,57 @@
+﻿using System;
+using AppsGenerate.CodeGenerate.Generators;
+using AppsGenerate.Structures.Impl;
+
+namespace AppsGenerate
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var class1 = new EntityStructure();
+            var class2 = new EntityStructure();
+            class2.Name = "Parent";
+            class1.ParentStructure = class2;
+            class1.Name = "User";
+            class1.AccessModificator = AccessModType.Public;
+            
+            class1.AddProperty(new PropertyStructure
+            {
+                AccessModificator = AccessModType.Public,
+                Name = "Name",
+                Type = typeof(String)
+            });
+            
+            class1.AddProperty(new PropertyStructure
+            {
+                AccessModificator = AccessModType.Public,
+                Name = "Password",
+                Type = typeof(String)
+            });
+            
+            class1.AddProperty(new PropertyStructure
+            {
+                AccessModificator = AccessModType.Public,
+                Name = "Id",
+                Type = typeof(Int64)
+            });
+            
+            var enum1 = new EnumStructure();
+            enum1.Name = "NumType";
+            enum1.AccessModificator = AccessModType.Public;
+            enum1._consts.Add("Inn");
+            enum1._consts.Add("Ogrn");
+            enum1._consts.Add("Kpp");
+            
+            var gen = new StructureGenerator();
+            gen.Generate(class1);
+            gen.Generate(enum1);
+            
+            var viewModel = new ModelStructure(class1);
+            
+            var gen2 = new ModelGenerator();
+            gen2.Generate(viewModel);
+
+        }
+    }
+}
