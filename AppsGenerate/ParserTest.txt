@@ -1,0 +1,22 @@
+{
+   "Name" : "Проект1",
+   "DbConnectionString" : "connection",
+   "Entities" : [
+                    {
+                        "Name" : "User",
+                        "DisplayName" : "Пользователь",
+                        "Properties" : [
+                                            {
+                                                "Name" : "Name",
+                                                "DisplayName" : "Имя",
+                                                "Type" : "String"
+                                            },
+                                            {
+                                                "Name" : "Number",
+                                                "DisplayName" : "Номер",
+                                                "Type" : "Int32"
+                                            }
+                                        ]
+                    }
+                ]
+}
