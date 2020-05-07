@@ -9,27 +9,18 @@ namespace AppsGenerate.CodeGenerate.Generators
     public class StructureGenerator : ServerGenerator
     {
 
-        public override FileInfo Generate(Structure structure)
+        public override FileInfo Generate(Structure structure, string path)
         {
-            var info = CreateFile(structure);
+            Path = path + "/Models";
+            var info = CreateFile(structure, path);
             InsertCode(info, structure);
             CloseCode(info);
-
-            if (structure.GetType() == typeof(EntityStructure))
-            {
-                var mapGenerator = new MapGenerator();
-                mapGenerator.Generate(structure as EntityStructure);
-                
-                var controllerGenerator = new ControllerGenerator();
-                controllerGenerator.Generate(structure as EntityStructure);
-            }
-
             return info;
         }
         
-        private FileInfo CreateFile(Structure structure)
+        private FileInfo CreateFile(Structure structure, string path)
         {
-            using (var fs = File.Create($"{structure.Name}.cs"))
+            using (var fs = File.Create($"{Path}/{structure.Name}.cs"))
             using (var writer = new StreamWriter(fs))
             {
                 writer.WriteLine($"namespace {structure.Project.Name}.Model{{");
@@ -47,12 +38,12 @@ namespace AppsGenerate.CodeGenerate.Generators
 
         private void InsertCode(FileInfo file, Structure structure)
         {
-            File.AppendAllLines(file.Name, structure.ToCode().Split("\n"));
+            File.AppendAllLines(Path + "/" + file.Name, structure.ToCode().Split("\n"));
         }
         
         private void CloseCode(FileInfo file)
         {
-            File.AppendAllLines(file.Name, new[] {
+            File.AppendAllLines(Path + "/" + file.Name, new[] {
                 "}}"
             });
         }

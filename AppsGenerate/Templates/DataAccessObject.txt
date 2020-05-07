@@ -5,7 +5,7 @@ using #.Models;
 using MoreLinq;
 using Npgsql;
 
-namespace #.Data
+namespace 'Name'.Data
 {
     using System;
     using System.Collections.Generic;

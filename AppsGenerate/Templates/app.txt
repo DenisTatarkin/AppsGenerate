@@ -3,22 +3,22 @@ Ext.Loader.setConfig({
 });
 Ext.application({
     requires: ['Ext.container.Viewport'],
-    name: '#Name#',
+    name: ''Name'',
     appFolder: 'ClientApp/app',
-    controllers: [#Controllers#],
+    controllers: ['Controllers'],
 
     launch: function () {
         Ext.create('Ext.container.Viewport', {
             layout: 'fit',
             items: {
                 xtype: 'panel',
-                title: '#DisplayName#',
+                title: ''DisplayName'',
                 items:
                     [{
                         xtype: 'tabpanel',
                         items:
                             [
-                                #Items#
+                                'Items'
                             ]
                     }]
             }

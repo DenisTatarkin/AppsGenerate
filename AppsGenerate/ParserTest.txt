@@ -1,5 +1,6 @@
 {
-   "Name" : "Проект1",
+   "Name" : "Project",
+   "DisplayName" : "Проект",
    "DbConnectionString" : "connection",
    "Entities" : [
                     {
@@ -17,6 +18,22 @@
                                                 "Type" : "Int32"
                                             }
                                         ]
-                    }
+                    },
+                    {
+                                            "Name" : "Guest",
+                                            "DisplayName" : "Гость",
+                                            "Properties" : [
+                                                                {
+                                                                    "Name" : "Name",
+                                                                    "DisplayName" : "Имя",
+                                                                    "Type" : "String"
+                                                                },
+                                                                {
+                                                                    "Name" : "Number",
+                                                                    "DisplayName" : "Номер",
+                                                                    "Type" : "Int32"
+                                                                }
+                                                            ]
+                                        }
                 ]
 }

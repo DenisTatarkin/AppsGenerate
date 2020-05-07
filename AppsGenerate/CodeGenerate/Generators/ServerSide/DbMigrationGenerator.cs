@@ -8,11 +8,11 @@ namespace AppsGenerate.CodeGenerate.Generators
 {
     public class DbMigrationGenerator : ServerGenerator
     {
-        public override FileInfo Generate(Structure structure)
+        public override FileInfo Generate(Structure structure, string path)
         {
             var entityStructure = structure as EntityStructure;
             
-            using (var fs = File.Create($"{structure.Name}Migration.cs"))
+            using (var fs = File.Create($"{path}/Migrations/{structure.Name}Migration.cs"))
             using (var writer = new StreamWriter(fs))
             {
                 writer.WriteLine($"namespace {entityStructure.Project.Name}.Migration{{");

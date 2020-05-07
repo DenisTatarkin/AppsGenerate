@@ -8,10 +8,10 @@ namespace AppsGenerate.CodeGenerate.Generators
 {
     public class MapGenerator : ServerGenerator
     {
-        public override FileInfo Generate(Structure structure)
+        public override FileInfo Generate(Structure structure, string path)
         {
             var entityStructure = structure as EntityStructure;
-            using (var fs = File.Create($"{structure.Name}Map.cs"))
+            using (var fs = File.Create($"{path}/Data/{structure.Name}Map.cs"))
             using (var writer = new StreamWriter(fs))
             {
                 writer.WriteLine($"namespace {entityStructure.Project.Name}.Map{{");

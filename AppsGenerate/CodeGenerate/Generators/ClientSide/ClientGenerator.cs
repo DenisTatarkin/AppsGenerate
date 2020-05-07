@@ -5,6 +5,8 @@ namespace AppsGenerate.CodeGenerate.Generators
 {
     public abstract class ClientGenerator
     {
-        public abstract FileInfo Generate(ViewStructure structure);
+        public abstract FileInfo Generate(ViewStructure structure, string path);
+        
+        public string Path { get; set; }
     }
 }

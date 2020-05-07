@@ -1,4 +1,4 @@
-namespace #.Data
+namespace 'Name'.Data
 {
     using Npgsql;
     using System.Data;

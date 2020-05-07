@@ -6,9 +6,9 @@ namespace AppsGenerate.CodeGenerate.Generators
 {
     public class ControllerGenerator : ServerGenerator
     {
-        public override FileInfo Generate(Structure structure)
+        public override FileInfo Generate(Structure structure, string path)
         {
-            using (var fs = File.Create($"{structure.Name}Controller.cs"))
+            using (var fs = File.Create($"{path}/Controllers/{structure.Name}Controller.cs"))
             using (var writer = new StreamWriter(fs))
             {
                 writer.WriteLine($"namespace {structure.Project.Name}.Controller{{");

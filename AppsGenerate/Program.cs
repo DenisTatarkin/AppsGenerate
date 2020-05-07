@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using AppsGenerate.CodeGenerate.Generators;
+using AppsGenerate.CodeGenerate.Generators.Publication;
 using AppsGenerate.CodeGenerate.Parse;
 using AppsGenerate.Structures;
 using AppsGenerate.Structures.Impl;
@@ -11,16 +12,28 @@ namespace AppsGenerate
     {
         static void Main(string[] args)
         {
-            using (var fs = File.Open("ParserTest.txt", FileMode.Open))
+            
+          using (var fs = File.Open("ParserTest.txt", FileMode.Open))
+          using (var reader = new StreamReader(fs))
+          {
+              var json = reader.ReadToEnd();
+              var parser = new MetaParser();
+              var projectMeta = parser.Parse(json);
+              
+              var builder = new Builder();
+              builder.Build(projectMeta);
+          }
+
+            /*using (var fs = File.Open("ParserTest.txt", FileMode.Open))
             using (var reader = new StreamReader(fs))
             {
                 var json = reader.ReadToEnd();
                 var parser = new MetaParser();
                 var projectMeta = parser.Parse(json);
                 Console.WriteLine("Done");
-            }
-        
-        
+            }*/
+
+
             /*var project1 = new ProjectStructure();
             project1.Name = "Clients";
             var class1 = new EntityStructure();

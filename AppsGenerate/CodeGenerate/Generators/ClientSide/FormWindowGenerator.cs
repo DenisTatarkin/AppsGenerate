@@ -5,17 +5,18 @@ namespace AppsGenerate.CodeGenerate.Generators
 {
     public class FormWindowGenerator : ClientGenerator
     {
-        public override FileInfo Generate(ViewStructure structure)
+        public override FileInfo Generate(ViewStructure structure, string path)
         {
-            var info = CreateFile(structure.Structure);
+            Path = path + "/wwwroot/ClientApp/app/view";
+            var info = CreateFile(structure.Structure, path);
             InsertCode(info, structure);
             CloseCode(info, structure.Structure);
             return info;
         }
         
-        private FileInfo CreateFile(Structure structure)
+        private FileInfo CreateFile(Structure structure, string path)
         {
-            using (var fs = File.Create($"{structure.Name}Window.js"))
+            using (var fs = File.Create($"{Path}/{structure.Name}Window.js"))
             using (var writer = new StreamWriter(fs))
             {
                 writer.WriteLine($@"Ext.define('{structure.Project.Name}.view.{structure.Name}Window', {{
@@ -34,12 +35,12 @@ namespace AppsGenerate.CodeGenerate.Generators
 
         private void InsertCode(FileInfo file, ViewStructure structure)
         {
-            File.AppendAllText(file.Name, structure.ToCode());
+            File.AppendAllText(Path + "/" + file.Name, structure.ToCode());
         }
 
         private void CloseCode(FileInfo file, Structure structure)
         {
-            File.AppendAllLines(file.Name, new[]
+            File.AppendAllLines(Path + "/" + file.Name, new[]
                 {@",
     buttons:
         [

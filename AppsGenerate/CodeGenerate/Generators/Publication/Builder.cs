@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using AppsGenerate.CodeGenerate.Parse.Meta;
 using AppsGenerate.Structures;
 using AppsGenerate.Structures.Impl;
+using GitHub;
 
 namespace AppsGenerate.CodeGenerate.Generators.Publication
 {
@@ -13,14 +14,14 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
         public void Build(ProjectMeta meta)
         {
             Package(meta);
-            CreateProject();
-            BuildProject();
-            GitProject();
+            //CreateProject();
+            //BuildProject();
+            //GitProject();
         }
 
         private void GitProject()
         {
-            throw new System.NotImplementedException();
+            throw new System.NotImplementedException();            
         }
 
         private void BuildProject()
@@ -35,7 +36,9 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
 
         private void Package(ProjectMeta meta)
         {
-            PackageFromTemplates(meta);
+            var path = $"../../Projects/{meta.Id}";
+            
+            PackageFromTemplates(meta, path);
 
             var projectStructure = new ProjectStructure
             {
@@ -70,37 +73,47 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
                         AccessModificator = AccessModType.Public,
                         DisplayName = metaProperty.DisplayName,
                         Name = metaProperty.Name,
-                        Project = projectStructure
+                        Project = projectStructure,
+                        Type = Type.GetType("System." + metaProperty.Type)
                     });
 
                 var modelStructure = new ModelStructure(entity);
                 var gridStructure = new GridStructure(entity);
                 var formStructure = new FormStructure(entity);
                 
-                structureGenerator.Generate(entity);
-                mapGenerator.Generate(entity);
-                controllerGenerator.Generate(entity);
-                dbMigrationGenerator.Generate(entity);
-                storeGenerator.Generate(modelStructure);
-                modelGenerator.Generate(modelStructure);
-                gridGenerator.Generate(gridStructure);
-                formWindowGenerator.Generate(formStructure);
-                clientControllerGenerator.Generate(modelStructure);
+                structureGenerator.Generate(entity,path);
+                mapGenerator.Generate(entity,path);
+                controllerGenerator.Generate(entity,path);
+                dbMigrationGenerator.Generate(entity,path);
+                storeGenerator.Generate(modelStructure,path);
+                modelGenerator.Generate(modelStructure,path);
+                gridGenerator.Generate(gridStructure,path);
+                formWindowGenerator.Generate(formStructure,path);
+                clientControllerGenerator.Generate(modelStructure,path);
             }
 
 
         }
 
-        private void PackageFromTemplates(ProjectMeta meta)
+        private void PackageFromTemplates(ProjectMeta meta, string path)
         {
-            Directory.CreateDirectory($"Projects/{meta.Id}");
-            var path = $"Projects/{meta.Id}";
+            Directory.CreateDirectory($"{path}");
+            Directory.CreateDirectory($"{path}/Controllers");
+            Directory.CreateDirectory($"{path}/Data");
+            Directory.CreateDirectory($"{path}/Migrations");
+            Directory.CreateDirectory($"{path}/Models");
+            Directory.CreateDirectory($"{path}/wwwroot/ClientApp");
+            Directory.CreateDirectory($"{path}/wwwroot/ClientApp/app/model");
+            Directory.CreateDirectory($"{path}/wwwroot/ClientApp/app/store");
+            Directory.CreateDirectory($"{path}/wwwroot/ClientApp/app/view");
+            Directory.CreateDirectory($"{path}/wwwroot/ClientApp/app/controller");
+
             
             using(var fs = new FileStream("Templates/Program.txt", FileMode.Open))
                 using (var reader = new StreamReader(fs))
                 {
                     var text = reader.ReadToEnd();
-                    Regex.Replace(text, "#", meta.Name);
+                    text = Regex.Replace(text, "'Name'", meta.Name);
                     
                     using(var fs2 = new FileStream(path + "/Program.cs", FileMode.OpenOrCreate))
                     using (var writer = new StreamWriter(fs2))
@@ -112,7 +125,7 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
                 using (var reader = new StreamReader(fs))
                 {
                     var text = reader.ReadToEnd();
-                    Regex.Replace(text, "#", meta.Name);
+                    text = Regex.Replace(text, "'Name'", meta.Name);
                         
                     using(var fs2 = new FileStream(path + "/Startup.cs", FileMode.OpenOrCreate))
                     using (var writer = new StreamWriter(fs2))
@@ -123,7 +136,7 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
                 using (var reader = new StreamReader(fs))
                 {
                     var text = reader.ReadToEnd();
-                    Regex.Replace(text, "#", meta.Name);
+                    text = Regex.Replace(text, "'Name'", meta.Name);
                             
                     using(var fs2 = new FileStream(path + "/Controllers/BaseController.cs", FileMode.OpenOrCreate))
                     using (var writer = new StreamWriter(fs2))
@@ -134,8 +147,8 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
                 using (var reader = new StreamReader(fs))
                 {
                     var text = reader.ReadToEnd();
-                    Regex.Replace(text, "#", meta.Name);
-                    Regex.Replace(text, "!", meta.DbConnectionString);
+                    text = Regex.Replace(text, "'Name'", meta.Name);
+                    text = Regex.Replace(text, "!", meta.DbConnectionString);
                                 
                     using(var fs2 = new FileStream(path + "/Data/ConnectionsFactory.cs", FileMode.OpenOrCreate))
                     using (var writer = new StreamWriter(fs2))
@@ -146,7 +159,7 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
             using (var reader = new StreamReader(fs))
             {
                 var text = reader.ReadToEnd();
-                Regex.Replace(text, "#", meta.Name);
+                text = Regex.Replace(text, "'Name'", meta.Name);
                                 
                 using(var fs2 = new FileStream(path + "/Data/DataAccessObject.cs", FileMode.OpenOrCreate))
                 using (var writer = new StreamWriter(fs2))
@@ -157,7 +170,7 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
             using (var reader = new StreamReader(fs))
             {
                 var text = reader.ReadToEnd();
-                Regex.Replace(text, "#", meta.DisplayName);
+                text = Regex.Replace(text, "'DisplayName'", meta.DisplayName);
                                 
                 using(var fs2 = new FileStream(path + "/wwwroot/index.html", FileMode.OpenOrCreate))
                 using (var writer = new StreamWriter(fs2))
@@ -168,17 +181,17 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
             using (var reader = new StreamReader(fs))
             {
                 var text = reader.ReadToEnd();
-                Regex.Replace(text, "#Name#", meta.Name);
-                Regex.Replace(text, "#DisplayName#", meta.DisplayName);
+                text = Regex.Replace(text, "'Name'", meta.Name);
+                text = Regex.Replace(text, "'DisplayName'", meta.DisplayName);
 
                 var controllers = String.Join(",", meta.Entities.Select(x => $"'{x.Name}'"));
-                Regex.Replace(text, "#Controllers#", controllers);
+                text = Regex.Replace(text, "'Controllers'", controllers);
                 
                 var items = String.Join(",", meta.Entities.Select(x => $@"title: '{x.DisplayName}',
                                                                                     items: [{{
                                                                                     xtype: '{x.Name.ToLower()}-list'
                                                                                     }}]"));
-                Regex.Replace(text, "#Items#", items);
+                text = Regex.Replace(text, "'Items'", items);
                 
                 using(var fs2 = new FileStream(path + "/wwwroot/ClientApp/app.js", FileMode.OpenOrCreate))
                 using (var writer = new StreamWriter(fs2))
