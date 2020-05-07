@@ -1,0 +1,61 @@
+using System.Collections.Generic;
+using System.Linq;
+using Fest.Data;
+using Fest.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Template;
+
+namespace #.Controllers
+{
+    [Route("api/[controller]")]
+    public abstract class BaseController<TEntity> : ControllerBase
+        where TEntity : IHaveId, new()
+    {
+        private IDataAccessObject<TEntity> _db;
+        
+        public BaseController(IDataAccessObject<TEntity> db)
+        {
+            _db = db;
+        }
+        // GET api/values
+        [HttpGet]
+        public ActionResult<IEnumerable<TEntity>> Get()
+        {
+            return _db.GetAll().ToList();
+        }
+
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public ActionResult<string> Get(int id)
+        {
+            return "value";
+        }
+
+        // POST api/values
+        [HttpPost]
+        public void Post([FromForm]TEntity entity)
+        {
+            _db.Add(entity);
+        }
+
+        // PUT api/values/5
+        [HttpPut]
+        public void Put([FromForm] TEntity entity)
+        {
+            _db.Update(entity);
+        }
+
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            _db.Delete(new TEntity{Id = id});
+        }
+        
+        [Route("filter")]
+        public ActionResult<IEnumerable<TEntity>> Filter([FromForm]string query)
+        {
+            return _db.Filter(query).ToList();
+        } 
+    }
+}

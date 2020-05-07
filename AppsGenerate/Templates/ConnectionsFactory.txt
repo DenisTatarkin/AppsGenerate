@@ -1,0 +1,22 @@
+namespace #.Data
+{
+    using Npgsql;
+    using System.Data;
+
+    public static class ConnectionsFactory
+    {
+        private static string _connectionString;
+
+        public static string ConnectionString => _connectionString;
+
+        static ConnectionsFactory()
+        {
+            _connectionString = "!";
+        }
+
+        public static NpgsqlConnection GetConnection()
+        {
+            return new NpgsqlConnection(_connectionString);
+        }
+    }
+}

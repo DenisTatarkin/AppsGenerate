@@ -1,0 +1,44 @@
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using #.Models;
+using MoreLinq;
+using Npgsql;
+
+namespace #.Data
+{
+    using System;
+    using System.Collections.Generic;
+
+    public abstract class DataAccessObject<TEntity> : IDisposable, IDataAccessObject<TEntity>
+    {
+        protected NpgsqlConnection _connection;
+        
+        public DataAccessObject()
+        {
+            _connection = ConnectionsFactory.GetConnection();
+            _connection.Open();
+        }
+        
+        public abstract ICollection<TEntity> GetAll();
+
+        public abstract TEntity GetById(int id);
+
+        public abstract void Add(TEntity item);
+
+        public abstract void Update(TEntity item);
+
+        public abstract void Delete(TEntity item);
+        
+        public abstract ICollection<TEntity> Filter(string query);
+
+        
+
+        public void Dispose()
+        {
+            _connection.Close();
+        }
+
+        public abstract long Count();
+    }
+}
