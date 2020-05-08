@@ -1,0 +1,7 @@
+namespace 'Name'.Model
+{
+    public interface IHaveId
+    {
+        public long Id { get; set; }
+    }
+}

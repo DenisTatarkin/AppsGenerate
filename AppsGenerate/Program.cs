@@ -13,7 +13,7 @@ namespace AppsGenerate
         static void Main(string[] args)
         {
             
-          using (var fs = File.Open("ParserTest.txt", FileMode.Open))
+          using (var fs = File.Open("../../../ParserTest.txt", FileMode.Open))
           using (var reader = new StreamReader(fs))
           {
               var json = reader.ReadToEnd();

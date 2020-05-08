@@ -8,7 +8,7 @@ namespace AppsGenerate.Structures.Impl
         
         public override string ToCode()
         {
-            return $"{Enum.GetName(typeof(AccessModType), AccessModificator).ToLower()} {Type.FullName} {Name} {{get;set;}}";
+            return $"{Enum.GetName(typeof(AccessModType), AccessModificator).ToLower()} virtual {Type.FullName} {Name} {{get;set;}}";
         }
     }
 }

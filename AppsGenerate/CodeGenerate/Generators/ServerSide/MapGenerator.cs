@@ -15,12 +15,12 @@ namespace AppsGenerate.CodeGenerate.Generators
             using (var writer = new StreamWriter(fs))
             {
                 writer.WriteLine($"namespace {entityStructure.Project.Name}.Map{{");
-                writer.WriteLine(UsingsService.GetUsings());
+                writer.WriteLine(UsingsService.GetUsings(structure.Project.Name));
                 writer.WriteLine($"public class {structure.Name}Map:ClassMapping<{structure.Name}>{{");
                 writer.WriteLine($"public {structure.Name}Map(){{");
                 writer.WriteLine("Id(x => x.Id, map =>  map.Generator(Generators.Native));");
                 entityStructure.GetProperties().ForEach(x => writer.WriteLine($"Property(x=>x.{x.Name});"));
-                writer.WriteLine("}}");
+                writer.WriteLine("}}}");
             }
 
             return new FileInfo($"{structure.Name}Map.cs");

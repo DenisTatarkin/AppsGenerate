@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AppsGenerate.Structures.Impl
 {
@@ -21,7 +22,7 @@ namespace AppsGenerate.Structures.Impl
         
         public override string ToCode()
         {
-            return " columns:[" + String.Join(",", _columns) + "]";
+            return " columns:[" + String.Join(",", _columns.Select(x => x.ToCode())) + "]";
         }
     }
 }

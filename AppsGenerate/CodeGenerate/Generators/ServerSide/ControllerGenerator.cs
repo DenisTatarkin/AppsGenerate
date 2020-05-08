@@ -12,7 +12,7 @@ namespace AppsGenerate.CodeGenerate.Generators
             using (var writer = new StreamWriter(fs))
             {
                 writer.WriteLine($"namespace {structure.Project.Name}.Controller{{");
-                writer.WriteLine(UsingsService.GetUsings());
+                writer.WriteLine(UsingsService.GetUsings(structure.Project.Name));
                 writer.WriteLine($"public class {structure.Name}Controller:BaseController<{structure.Name}>{{");
                 writer.WriteLine($"public {structure.Name}Controller(IDataAccessObject<{structure.Name}> db) : base(db){{}}");
                 writer.WriteLine("}}");

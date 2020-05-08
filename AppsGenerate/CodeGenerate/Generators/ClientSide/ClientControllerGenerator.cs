@@ -16,7 +16,7 @@ namespace AppsGenerate.CodeGenerate.Generators
         
         private FileInfo CreateFile(Structure structure, string path)
         {
-            using (var fs = File.Create($"{Path}/{structure.Name}Window.js"))
+            using (var fs = File.Create($"{Path}/{structure.Name}Controller.js"))
             using (var writer = new StreamWriter(fs))
             {
                 writer.WriteLine($@"Ext.define('{structure.Project.Name}.controller.{structure.Name}Controller', {{

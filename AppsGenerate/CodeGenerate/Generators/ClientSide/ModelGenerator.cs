@@ -22,12 +22,10 @@ namespace AppsGenerate.CodeGenerate.Generators
             using (var fs = File.Create($"{Path}/{structure.Name}Model.js"))
             using (var writer = new StreamWriter(fs))
             {
-                writer.WriteLine($@"Ext.define('{structure.Project.Name}.model.{structure.Name}', {{
+                writer.WriteLine($@"Ext.define('{structure.Project.Name}.model.{structure.Name}Model', {{
                    extend: 'Ext.data.Model',
                     idProperty: 'id',
-                    fields:
-                            {{
-                  ");
+                    fields:");
                 return new FileInfo($"{structure.Name}Model.js");
             }
         }
@@ -49,7 +47,6 @@ namespace AppsGenerate.CodeGenerate.Generators
                 writeAllFields: true
             }}
         }}
-    }}
     }});"
             });
         }

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using AsMvEmulator.Data.DAO;
-using Fest.Data;
-using Fest.Models;
+using 'Name'.Data;
+using 'Name'.Model;
 using FluentMigrator;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Announcers;
@@ -33,13 +32,8 @@ namespace 'Name'
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            ##
-            services.AddScoped(typeof(IDataAccessObject<Artist>), typeof(ArtistDao));
-
-            
-            services.Configure<ConnectionConfig>(Configuration.GetSection("ConnectionConfig"));
+           services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest).AddMvcOptions(x => x.EnableEndpointRouting = false);
+            'Scope'
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

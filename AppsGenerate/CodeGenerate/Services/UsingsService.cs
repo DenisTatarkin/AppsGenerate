@@ -5,14 +5,18 @@ namespace AppsGenerate.CodeGenerate.Services
 {
     public static class UsingsService
     {
-        private static string[] usings = new[] {"System", "System.Collections.Generic"};
+        private static string[] usings = new[]
+        {
+            "System", "System.Collections.Generic","'Name'.Controllers",
+            "'Name'.Data","'Name'.Model","NHibernate.Mapping.ByCode","NHibernate.Mapping.ByCode.Conformist"
+        };
         
-        public static string GetUsings()
+        public static string GetUsings(string projectName)
         {
             var code = new StringBuilder();
             
             foreach (var u in usings)
-                code.AppendLine($"using {u};");
+                code.AppendLine($"using {u.Replace("'Name'",projectName)};");
 
             return code.ToString();
         }

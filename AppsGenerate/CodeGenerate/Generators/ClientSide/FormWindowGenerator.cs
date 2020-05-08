@@ -41,7 +41,7 @@ namespace AppsGenerate.CodeGenerate.Generators
         private void CloseCode(FileInfo file, Structure structure)
         {
             File.AppendAllLines(Path + "/" + file.Name, new[]
-                {@",
+                {@"
     buttons:
         [
             {

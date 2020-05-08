@@ -8,7 +8,7 @@ namespace AppsGenerate.CodeGenerate.Services
         public static string GetExtType(Type dotNetType)
         {
             if (typeof(String) == dotNetType)
-                return "text";
+                return "string";
             if (typeof(Int16) == dotNetType || typeof(Int32) == dotNetType || typeof(Int64) == dotNetType)
                 return "number";
             return null;

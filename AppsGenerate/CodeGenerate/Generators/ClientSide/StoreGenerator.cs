@@ -19,9 +19,9 @@ namespace AppsGenerate.CodeGenerate.Generators
             using (var fs = File.Create($"{Path}/{structure.Name}Store.js"))
             using (var writer = new StreamWriter(fs))
             {
-                writer.WriteLine($@"Ext.define('{structure.Project.Name}.store.{structure.Name}', {{
+                writer.WriteLine($@"Ext.define('{structure.Project.Name}.store.{structure.Name}Store', {{
                    extend: 'Ext.data.Store',
-                   model: 'Fest.model.{structure.Name}Model',
+                   model: '{structure.Project.Name}.model.{structure.Name}Model',
     autoload: true,
     storeId: '{structure.Name}Store',
     proxy: {{

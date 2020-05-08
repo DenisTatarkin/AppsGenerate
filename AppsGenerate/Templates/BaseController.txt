@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Fest.Data;
-using Fest.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing.Template;
+using 'Name'.Model;
+using 'Name'.Data;
 
 namespace 'Name'.Controllers
 {

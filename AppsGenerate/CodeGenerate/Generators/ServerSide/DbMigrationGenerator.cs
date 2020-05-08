@@ -16,7 +16,7 @@ namespace AppsGenerate.CodeGenerate.Generators
             using (var writer = new StreamWriter(fs))
             {
                 writer.WriteLine($"namespace {entityStructure.Project.Name}.Migration{{");
-                writer.WriteLine(UsingsService.GetUsings());
+                writer.WriteLine(UsingsService.GetUsings(structure.Project.Name));
                 writer.WriteLine($"[Migration({DateTime.Now.Year}{DateTime.Now.Day}{DateTime.Now.Month}{DateTime.Now.Hour}{DateTime.Now.Minute}00)]");
                 writer.WriteLine($"public class {structure.Name}Migration:Migration{{");
                 writer.WriteLine($"public Up(){{");

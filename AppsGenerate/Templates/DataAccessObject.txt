@@ -1,9 +1,8 @@
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using #.Models;
-using MoreLinq;
-using Npgsql;
+using NHibernate;
+using NHibernate.Linq;
 
 namespace 'Name'.Data
 {
@@ -12,33 +11,64 @@ namespace 'Name'.Data
 
     public abstract class DataAccessObject<TEntity> : IDisposable, IDataAccessObject<TEntity>
     {
-        protected NpgsqlConnection _connection;
+        protected ISession _session;
         
         public DataAccessObject()
         {
-            _connection = ConnectionsFactory.GetConnection();
-            _connection.Open();
+            _session = NHibernateHelper.OpenSession();
         }
-        
-        public abstract ICollection<TEntity> GetAll();
-
-        public abstract TEntity GetById(int id);
-
-        public abstract void Add(TEntity item);
-
-        public abstract void Update(TEntity item);
-
-        public abstract void Delete(TEntity item);
-        
-        public abstract ICollection<TEntity> Filter(string query);
-
-        
 
         public void Dispose()
         {
-            _connection.Close();
+            _session.Close();
         }
 
-        public abstract long Count();
+        public ICollection<TEntity> GetAll()
+        {
+            return _session.Query<TEntity>().ToList();
+        }
+
+        public TEntity GetById(int id)
+        {
+            return _session.Get<TEntity>(id);
+        }
+
+        public void Add(TEntity item)
+        {
+            using (var t = _session.BeginTransaction())
+            {
+                _session.Save(item);
+                t.Commit();
+            }
+        }
+
+        public void Update(TEntity item)
+        {
+            using (var t = _session.BeginTransaction())
+            {
+                _session.Update(item);
+                t.Commit();
+            }
+        }
+
+        public void Delete(TEntity item)
+        {
+            using (var t = _session.BeginTransaction())
+            {
+                _session.Delete(item);
+                t.Commit();
+            }
+        }
+
+        public long Count()
+        {
+            return _session.Query<TEntity>().Count();
+        }
+
+        public ICollection<TEntity> Filter(string query)
+        {
+            throw new NotImplementedException();
+        }
     }
+   
 }

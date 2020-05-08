@@ -24,13 +24,22 @@ namespace AppsGenerate.CodeGenerate.Generators
             using (var writer = new StreamWriter(fs))
             {
                 writer.WriteLine($"namespace {structure.Project.Name}.Model{{");
-                writer.WriteLine(UsingsService.GetUsings());
+                writer.WriteLine(UsingsService.GetUsings(structure.Project.Name));
                 writer.WriteLine(Enum.GetName(typeof(AccessModType), structure.AccessModificator).ToLower() + " " +
                     Enum.GetName(typeof(StructureType), structure.StrucutureType).ToLower() + " " +
                     structure.Name + 
-                    (structure.ParentStructure != null ? ":" + structure.ParentStructure.Name : "") + 
-                                                                                               " {");
-                writer.WriteLine("//GeneratedCode");
+                    (structure.ParentStructure != null ? ":" + structure.ParentStructure.Name : ""));
+
+                if (structure is EntityStructure)
+                {
+                    if (structure.ParentStructure == null)
+                        writer.Write(":IHaveId");
+                    else
+                        writer.Write(", IHaveId");
+                    
+                    writer.WriteLine("{");
+                    writer.WriteLine("public virtual long Id { get; set; }");
+                }
             }
 
             return new FileInfo($"{structure.Name}.cs");
