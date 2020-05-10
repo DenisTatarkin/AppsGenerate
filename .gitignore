@@ -3,3 +3,7 @@ AppsGenerate/bin/
 AppsGenerate/obj/
 .idea/
 AppsGenerate/ExtJs/
+WebApp/ClientApp/node_modules/
+WebApp/bin/
+WebApp/obj/
+WebApp/node_modules/

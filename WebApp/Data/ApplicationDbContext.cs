@@ -1,0 +1,20 @@
+
+
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using WebApp.Models.Entities;
+
+namespace WebApp.Data
+{
+public class ApplicationDbContext : IdentityDbContext<AppUser> 
+{
+        public ApplicationDbContext(DbContextOptions options)
+            : base(options)
+        {
+        }
+        
+        public DbSet<UserRole> UserRole { get; set; }
+    }
+}
+ 
+ 
