@@ -4,39 +4,53 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using AppsGenerate.CodeGenerate.Parse.Meta;
+using AppsGenerate.Services;
 using AppsGenerate.Structures;
 using AppsGenerate.Structures.Impl;
-using GitHub;
 
 namespace AppsGenerate.CodeGenerate.Generators.Publication
 {
     public class Builder
     {
-        public void Build(ProjectMeta meta)
+        public void Build(ProjectMeta meta, string port)
         {
             var path = $"../../../../../Projects/{meta.Id}/{meta.Name}";
             
             CreateProject(meta,path);
             Package(meta, path);
-            BuildProject(meta, path);
-            //GitProject();
+            Console.WriteLine($"Сгенерированы файлы для проекта {meta.Id}/{meta.Name}");
+            BuildProject(meta, port);
+            GitProject(meta, path);
+            Console.WriteLine($"Сгенерированый проект {meta.Id}/{meta.Name} опубликован системой git на удаленном репозитории");
         }
 
-        private void GitProject()
+        private void GitProject(ProjectMeta meta, string path)
         {
-            throw new System.NotImplementedException();            
+            var gitService = new GitService(path);
+            gitService.Init();
+            gitService.AddAll();
+            gitService.Commit();
+            gitService.PushOwnRepository();
         }
 
-        private void BuildProject(ProjectMeta meta, string path)
+        private void BuildProject(ProjectMeta meta, string port)
         {
-            var process = new Process();
-            process.StartInfo.FileName = "/bin/bash";
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.Arguments = $"-c \" ../../../ShellScripts/./DotnetRun.sh {meta.Id} {meta.Name} \"";
-            process.StartInfo.UseShellExecute = false;
-            process.Start();
-            while(process.StandardOutput.ReadLine() != null){}
+            var thread = new Thread(()=>
+            {
+                var process = ThreadsFactory.CreateNewThread(meta.Id.ToString());
+                process.StartInfo.FileName = "/bin/bash";
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardInput = true;
+                process.StartInfo.Arguments = $"-c \" ../../../ShellScripts/./DotnetRun.sh {meta.Id} {meta.Name} {port}\"";
+                process.StartInfo.UseShellExecute = false;
+                process.Start();
+                Console.WriteLine($"Проект {meta.Id}/{meta.Name} запущен на порте:" + port);
+                process.WaitForExit();
+            });
+            
+            thread.Start();
         }
 
         private void CreateProject(ProjectMeta meta, string path)
@@ -82,7 +96,7 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
             var mapGenerator = new MapGenerator();
             var daoGenerrator = new DaoGenerator();
             var controllerGenerator = new ControllerGenerator();
-            var dbMigrationGenerator = new DbMigrationGenerator();
+            //var dbMigrationGenerator = new DbMigrationGenerator();
             var storeGenerator = new StoreGenerator();
             var modelGenerator = new ModelGenerator();
             var gridGenerator = new GridGenerator();
@@ -132,7 +146,7 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
                 mapGenerator.Generate(entity,path);
                 daoGenerrator.Generate(entity, path);
                 controllerGenerator.Generate(entity,path);
-                dbMigrationGenerator.Generate(entity,path);
+                //dbMigrationGenerator.Generate(entity,path);
                 storeGenerator.Generate(modelStructure,path);
                 modelGenerator.Generate(modelStructure,path);
                 gridGenerator.Generate(gridStructure,path);

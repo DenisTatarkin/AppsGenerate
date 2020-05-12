@@ -65,10 +65,7 @@ namespace 'Name'.Data
             return _session.Query<TEntity>().Count();
         }
 
-        public ICollection<TEntity> Filter(string query)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract ICollection<TEntity> Filter(string query);
     }
    
 }

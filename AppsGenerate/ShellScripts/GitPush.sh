@@ -1,0 +1,1 @@
+cd ../../../../../Projects/$1/$2 && git push --set-upstream origin master

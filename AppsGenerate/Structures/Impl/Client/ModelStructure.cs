@@ -29,10 +29,13 @@ namespace AppsGenerate.Structures.Impl
 
         public override string ToCode()
         {
-            var code = $"fields:[{{name:'id',type:'number'}},{String.Join(",",Fields.Select(x => x.ToCode()))},";
+            var code = "fields:[{name:'id',type:'number'}";
+            if(Fields.Count > 0)
+                code +=$",{String.Join(",",Fields.Select(x => x.ToCode()))}";
+            
             if (Associations.Count > 0)
             {
-                Associations.ForEach(x => code += $"{{name : '{x.Name.ToLower()}{x.ShownProperty.ToLower()}', type: 'string', mapping : '{x.Name.Remove(0, 1).Insert(0, Char.ToLower(x.Name[0]).ToString())}.{x.ShownProperty.ToLower()}'}},");
+                Associations.ForEach(x => code += $",{{name : '{x.Name.ToLower()}{x.ShownProperty.ToLower()}', type: 'string', mapping : '{x.Name.Remove(0, 1).Insert(0, Char.ToLower(x.Name[0]).ToString())}.{x.ShownProperty.ToLower()}'}}");
                 code += "],";
                 code += $"associations:[{String.Join(",", Associations.Select(x => x.ToCode()))}],";
             }

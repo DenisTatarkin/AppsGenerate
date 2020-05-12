@@ -1,1 +1,1 @@
-cd ../../../../../Projects/$1/$2 && dotnet run
+cd ../../../../../Projects/$1/$2 && dotnet run --urls=http://localhost:$3/

@@ -22,7 +22,7 @@ namespace AppsGenerate.CodeGenerate.Generators
                 writer.WriteLine($@"Ext.define('{structure.Project.Name}.view.{structure.Name}Window', {{
                    extend: 'Ext.window.Window',
     alias: 'widget.{structure.Name.ToLower()}-window',
-    title: 'Title',
+    title: '{structure.DisplayName}',
     layout: 'fit',
     autoShow: true,
     initComponent: function () {{

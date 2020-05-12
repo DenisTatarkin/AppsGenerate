@@ -9,7 +9,7 @@ namespace AppsGenerate.CodeGenerate.Services
         {
             "System", "System.Collections.Generic","'Name'.Controllers",
             "'Name'.Data","'Name'.Model","NHibernate.Mapping.ByCode","NHibernate.Mapping.ByCode.Conformist", 
-            "Newtonsoft.Json"
+            "Newtonsoft.Json", "System.Linq"
         };
         
         public static string GetUsings(string projectName)
