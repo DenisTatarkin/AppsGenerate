@@ -12,6 +12,10 @@ namespace AppsGenerate.Structures
         
         public string DisplayName { get; set; }
         
+        public bool IsChoosed { get; set; }
+        
+        public string ShownProperty { get; set; }
+
         public AccessModType AccessModificator { get; set; }
 
         public string ToEmptyCode()

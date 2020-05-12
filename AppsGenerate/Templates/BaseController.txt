@@ -23,24 +23,27 @@ namespace 'Name'.Controllers
             return _db.GetAll().ToList();
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
+       // GET api/values/5
+       [HttpGet("{id}")]
+       public ActionResult<TEntity> Get(int id)
+       {
+           return _db.GetById(id);
+       }
 
         // POST api/values
         [HttpPost]
         public void Post([FromForm]TEntity entity)
         {
+            if(entity is IJson)
+                (entity as IJson).SetPropertiesFromJson();
             _db.Add(entity);
         }
 
         // PUT api/values/5
         [HttpPut]
         public void Put([FromForm] TEntity entity)
-        {
+    {       if(entity is IJson)
+                (entity as IJson).SetPropertiesFromJson();
             _db.Update(entity);
         }
 

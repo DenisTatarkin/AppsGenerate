@@ -24,8 +24,7 @@ namespace AppsGenerate.CodeGenerate.Generators
             {
                 writer.WriteLine($@"Ext.define('{structure.Project.Name}.model.{structure.Name}Model', {{
                    extend: 'Ext.data.Model',
-                    idProperty: 'id',
-                    fields:");
+                    idProperty: 'id',");
                 return new FileInfo($"{structure.Name}Model.js");
             }
         }
@@ -39,7 +38,7 @@ namespace AppsGenerate.CodeGenerate.Generators
         {
             File.AppendAllLines(Path + "/" + file.Name, new[]
             {
-               $@", proxy: {{
+               $@"proxy: {{
         type: 'rest',
         url: '/api/{structure.Name}',
         writer: {{

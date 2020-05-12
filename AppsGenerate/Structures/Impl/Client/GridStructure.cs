@@ -18,6 +18,11 @@ namespace AppsGenerate.Structures.Impl
         {
             var entity = Structure as EntityStructure;
             entity.GetProperties().ForEach(x => _columns.Add(new ColumnStructure(x)));
+            entity.GetLinkedEntities().ForEach(x => _columns.Add(new ColumnStructure
+            {
+                DisplayName = x.DisplayName,
+                Name = $"{x.Name.ToLower()}{x.ShownProperty.ToLower()}",
+            }));
         }
         
         public override string ToCode()

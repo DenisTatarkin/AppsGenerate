@@ -20,6 +20,7 @@ namespace AppsGenerate.CodeGenerate.Generators
                 writer.WriteLine($"public {structure.Name}Map(){{");
                 writer.WriteLine("Id(x => x.Id, map =>  map.Generator(Generators.Native));");
                 entityStructure.GetProperties().ForEach(x => writer.WriteLine($"Property(x=>x.{x.Name});"));
+                entityStructure.GetLinkedEntities().ForEach(x => writer.WriteLine($"ManyToOne(x => x.{x.Name}, c => c.Column(\"{x.Name.ToLower()}_id\"));"));
                 writer.WriteLine("}}}");
             }
 

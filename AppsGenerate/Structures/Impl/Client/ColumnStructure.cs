@@ -2,6 +2,7 @@ namespace AppsGenerate.Structures.Impl
 {
     public class ColumnStructure : ViewStructure
     {
+        public ColumnStructure(){}
         public ColumnStructure(PropertyStructure property) : base(property)
         {
             Name = property.Name;

@@ -88,6 +88,7 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
             var gridGenerator = new GridGenerator();
             var formWindowGenerator = new FormWindowGenerator();
             var clientControllerGenerator = new ClientControllerGenerator();
+            var chooseFormWindowGenerator = new ChooseFormWindowGenerator();
 
             foreach (var metaEntity in meta.Entities)
             {
@@ -98,7 +99,9 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
                     Name = metaEntity.Name,
                     //todo:ParentStructure
                     Project = projectStructure,
-                    StrucutureType = StructureType.Class
+                    StrucutureType = StructureType.Class,
+                    IsChoosed = metaEntity.IsChoosed,
+                    ShownProperty = metaEntity.ShownProperty
                 };
 
                 foreach (var metaProperty in metaEntity.Properties)
@@ -110,6 +113,16 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
                         Project = projectStructure,
                         Type = Type.GetType("System." + metaProperty.Type)
                     });
+
+                foreach (var linkedEntityMeta in metaEntity.LinkedEntities)
+                {
+                    entity.AddLinkedEntity(new LinkedEntityStructure
+                    {
+                        Name = linkedEntityMeta.Name,
+                        DisplayName = linkedEntityMeta.DisplayName,
+                        ShownProperty = linkedEntityMeta.ShownProperty
+                    });
+                }
 
                 var modelStructure = new ModelStructure(entity);
                 var gridStructure = new GridStructure(entity);
@@ -125,6 +138,8 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
                 gridGenerator.Generate(gridStructure,path);
                 formWindowGenerator.Generate(formStructure,path);
                 clientControllerGenerator.Generate(modelStructure,path);
+                if (entity.IsChoosed)
+                    chooseFormWindowGenerator.Generate(modelStructure, path);
             }
 
 
@@ -272,6 +287,16 @@ namespace AppsGenerate.CodeGenerate.Generators.Publication
             {
                 var text = reader.ReadToEnd();
                 using(var fs2 = new FileStream(path + $"/{meta.Name}.csproj", FileMode.OpenOrCreate))
+                using (var writer = new StreamWriter(fs2))
+                    writer.Write(text);
+            }
+            
+            using(var fs = new FileStream("../../../Templates/IJson.txt", FileMode.Open))
+            using (var reader = new StreamReader(fs))
+            {
+                var text = reader.ReadToEnd();
+                text = Regex.Replace(text, "'Name'", meta.Name);
+                using(var fs2 = new FileStream(path + $"/Models/IJson.cs", FileMode.OpenOrCreate))
                 using (var writer = new StreamWriter(fs2))
                     writer.Write(text);
             }

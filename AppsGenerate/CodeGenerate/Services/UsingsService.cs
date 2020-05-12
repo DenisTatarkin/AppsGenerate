@@ -8,7 +8,8 @@ namespace AppsGenerate.CodeGenerate.Services
         private static string[] usings = new[]
         {
             "System", "System.Collections.Generic","'Name'.Controllers",
-            "'Name'.Data","'Name'.Model","NHibernate.Mapping.ByCode","NHibernate.Mapping.ByCode.Conformist"
+            "'Name'.Data","'Name'.Model","NHibernate.Mapping.ByCode","NHibernate.Mapping.ByCode.Conformist", 
+            "Newtonsoft.Json"
         };
         
         public static string GetUsings(string projectName)

@@ -10,5 +10,11 @@ namespace AppsGenerate.CodeGenerate.Parse.Meta
         
         public PropertyMeta[] Properties { get; set; }
         
+        public LinkedEntityMeta[] LinkedEntities { get; set; }
+        
+        public bool IsChoosed { get; set; }
+        
+        public string ShownProperty { get; set; }
+        
     }
 }

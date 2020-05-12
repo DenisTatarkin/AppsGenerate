@@ -36,7 +36,8 @@ namespace AppsGenerate.CodeGenerate.Generators
                         writer.Write(":IHaveId");
                     else
                         writer.Write(", IHaveId");
-                    
+                    if((structure as EntityStructure).GetLinkedEntities().Count != 0)
+                        writer.Write(", IJson");
                     writer.WriteLine("{");
                     writer.WriteLine("public virtual long Id { get; set; }");
                 }
@@ -48,6 +49,19 @@ namespace AppsGenerate.CodeGenerate.Generators
         private void InsertCode(FileInfo file, Structure structure)
         {
             File.AppendAllLines(Path + "/" + file.Name, structure.ToCode().Split("\n"));
+            if (structure is EntityStructure)
+            {
+                var entity = structure as EntityStructure;
+
+                if (entity.GetLinkedEntities().Count > 0)
+                {
+                    var code = @"public virtual void SetPropertiesFromJson()
+                    {";
+                    entity.GetLinkedEntities().ForEach(x => code += $"{x.Name} = JsonConvert.DeserializeObject<{x.Name}>({x.Name}Json);\n");
+                    code += "}";
+                    File.AppendAllLines(Path + "/" + file.Name, new[] {code});
+                }
+            }
         }
         
         private void CloseCode(FileInfo file)

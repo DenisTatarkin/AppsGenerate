@@ -6,10 +6,13 @@ namespace AppsGenerate.Structures.Impl
     public class EntityStructure : Structure
     {
         private List<PropertyStructure> _properties;
-        
+
+        private List<LinkedEntityStructure> _linkedEntities;
+
         public EntityStructure()
         {
             _properties = new List<PropertyStructure>();
+            _linkedEntities = new List<LinkedEntityStructure>();
             StrucutureType = StructureType.Class;
         }
 
@@ -23,6 +26,21 @@ namespace AppsGenerate.Structures.Impl
             return _properties;
         }
         
+        public bool RemoveLinkedEntity(LinkedEntityStructure entity)
+        {
+            return _linkedEntities.Remove(entity);
+        }
+        
+        public void AddLinkedEntity(LinkedEntityStructure entity)
+        {
+            _linkedEntities.Add(entity);
+        }
+
+        public List<LinkedEntityStructure> GetLinkedEntities()
+        {
+            return _linkedEntities;
+        }
+        
         public bool RemoveProperty(PropertyStructure property)
         {
             return _properties.Remove(property);
@@ -32,6 +50,7 @@ namespace AppsGenerate.Structures.Impl
         {
             var code = new StringBuilder();
             _properties.ForEach(x => code.AppendLine(x.ToCode()));
+            _linkedEntities.ForEach(x => code.AppendLine(x.ToCode()));
             return code.ToString();
         }
     }

@@ -4,6 +4,7 @@ namespace AppsGenerate.Structures
 {
     public abstract class ViewStructure
     {
+        public ViewStructure(){}
         public ViewStructure(Structure structure)
         {
             Structure = structure;

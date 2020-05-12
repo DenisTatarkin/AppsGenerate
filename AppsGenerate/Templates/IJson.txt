@@ -1,0 +1,7 @@
+namespace 'Name'.Model
+{
+    public interface IJson
+    {
+        public void SetPropertiesFromJson();
+    }
+}

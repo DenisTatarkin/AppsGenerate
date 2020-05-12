@@ -19,9 +19,13 @@ namespace AppsGenerate.CodeGenerate.Generators
             using (var fs = File.Create($"{Path}/{structure.Name}Controller.js"))
             using (var writer = new StreamWriter(fs))
             {
-                writer.WriteLine($@"Ext.define('{structure.Project.Name}.controller.{structure.Name}Controller', {{
+                writer.Write($@"Ext.define('{structure.Project.Name}.controller.{structure.Name}Controller', {{
     extend: 'Ext.app.Controller',
-    views: ['{structure.Name}List', '{structure.Name}Window'],
+    views: ['{structure.Name}List', '{structure.Name}Window'"); 
+                if(structure.IsChoosed)
+                    writer.Write($", '{structure.Name}ChooseWindow'");
+                writer.Write("],");
+                writer.WriteLine($@"
     stores: ['{structure.Name}Store'],
     models: ['{structure.Name}Model'],
 
@@ -52,10 +56,15 @@ namespace AppsGenerate.CodeGenerate.Generators
             '{structure.Name.ToLower()}-window button[action=clear]': {{
                 click: this.clearForm
             }},
-            'artist-window button[action=save]': {{
+            '{structure.Name.ToLower()}-window button[action=save]': {{
                 click: this.save
-            }}
-        }});
+            }}");
+                if(structure.IsChoosed)
+                    writer.Write($@",  '{structure.Name.ToLower()}choose-window button[action=save]': {{
+                        click: this.choose{structure.Name}
+            }}");
+                writer.WriteLine($@"
+            }});
     }},
 
     openWindow: function () {{
@@ -89,7 +98,7 @@ namespace AppsGenerate.CodeGenerate.Generators
             url: form.getRecord().getProxy().getUrl(),
             method: method,
             success: function () {{
-                let grid = Ext.ComponentQuery.query('artists-list')[0];
+                let grid = Ext.ComponentQuery.query('{structure.Name.ToLower()}-list')[0];
                 grid.getStore().load();
             }},
             failure: function () {{
@@ -99,7 +108,7 @@ namespace AppsGenerate.CodeGenerate.Generators
     }},
 
     getSelectedItem: function (button) {{
-        let grid = button.up('tabpanel').down('artists-list');
+        let grid = button.up('tabpanel').down('{structure.Name.ToLower()}-list');
         let items = grid.getSelectionModel().getSelected().items;
         if (items.length == 0) {{
             Ext.Msg.alert('Ошибка', 'Выберите запись и повторите.', Ext.emptyFn);
@@ -129,7 +138,18 @@ namespace AppsGenerate.CodeGenerate.Generators
         
         let data = Ext.JSON.decode(response.responseText);
         grid.getStore().loadData(data)
-    }},
+    }},");
+                if(structure.IsChoosed)
+                    writer.WriteLine($@"
+    choose{structure.Name}: function (button) {{
+                        var grid = button.up('window').down('grid');
+                var selectedItem = grid.getSelectionModel().selected.items[0].data;
+                var form = Ext.ComponentQuery.query('form')[0];//Ext.getCmp('{structure.Name.ToLower()}-form');
+                var textField = form.down('#{structure.Name.ToLower()}-field');
+                textField.setValue(selectedItem);
+                button.up('window').close();
+                    }},");
+                writer.WriteLine($@"
     
     clearForm: function(button){{
         button.up('window').down('form').reset();
